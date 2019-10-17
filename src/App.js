@@ -1,8 +1,7 @@
 import React from 'react';
-import { Text } from 'react-native';
 
-// import { Container } from './styles';
+import Routes from './Routes';
 
 export default function src() {
-  return <Text>Meetapp</Text>;
+  return <Routes />;
 }
