@@ -1,4 +1,7 @@
 import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { signUpRequest } from '~/store/modules/auth/actions';
 
 import Background from '~/components/Background';
 import logo from '~/assets/logo.png';
@@ -14,6 +17,8 @@ import {
 } from './styles';
 
 export default function SignUp({ navigation }) {
+  const dispatch = useDispatch();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +26,9 @@ export default function SignUp({ navigation }) {
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  function handleSubmit() {}
+  function handleSubmit() {
+    dispatch(signUpRequest(name, email, password));
+  }
 
   return (
     <Background>
@@ -32,7 +39,6 @@ export default function SignUp({ navigation }) {
           <FormInput
             icon="person-outline"
             autoCorrect={false}
-            autoCapitalize="none"
             placeholder="Nome completo"
             returnKeyType="send"
             onSubmitEditing={() => emailRef.current.focus()}
