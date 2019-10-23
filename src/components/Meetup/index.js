@@ -14,7 +14,7 @@ import {
   Banner,
 } from './styles';
 
-export default function Meetup({ data }) {
+export default function Meetup({ data, onSubscribe, onUnsubscribe }) {
   return (
     <Container>
       <Banner source={banner} />
@@ -34,7 +34,17 @@ export default function Meetup({ data }) {
           <FieldText>Organizador: {data.User.name}</FieldText>
         </Field>
 
-        <Button>Realizar inscrição</Button>
+        {onSubscribe && (
+          <Button onPress={() => onSubscribe(data.id)}>
+            Realizar inscrição
+          </Button>
+        )}
+
+        {onUnsubscribe && (
+          <Button onPress={() => onUnsubscribe(data.id)}>
+            Cancelar inscrição
+          </Button>
+        )}
       </Content>
     </Container>
   );
@@ -42,6 +52,7 @@ export default function Meetup({ data }) {
 
 Meetup.propTypes = {
   data: PropTypes.shape({
+    id: PropTypes.number,
     title: PropTypes.string,
     location: PropTypes.string,
     dateFormatted: PropTypes.string,
@@ -49,4 +60,11 @@ Meetup.propTypes = {
       name: PropTypes.string,
     }),
   }).isRequired,
+  onSubscribe: PropTypes.func,
+  onUnsubscribe: PropTypes.func,
+};
+
+Meetup.defaultProps = {
+  onSubscribe: undefined,
+  onUnsubscribe: undefined,
 };

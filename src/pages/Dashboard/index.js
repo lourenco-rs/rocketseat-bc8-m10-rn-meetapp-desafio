@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
-
+import { showMessage } from 'react-native-flash-message';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { errorMessage } from '~/util/errorHandler';
+
 import Background from '~/components/Background';
 import Header from '~/components/Header';
 import DateInput from './DateInput';
@@ -18,7 +20,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     (async function loadMeetups() {
-      const response = await api.get('meetups', {
+      const response = await api.get('available', {
         params: {
           date,
         },
@@ -35,6 +37,24 @@ export default function Dashboard() {
     })();
   }, [date]);
 
+  async function handleSubscribe(meetupId) {
+    try {
+      await api.post(`subscriptions/${meetupId}`);
+
+      showMessage({
+        type: 'success',
+        icon: 'auto',
+        message: 'Inscrição realizada com sucesso',
+      });
+    } catch (error) {
+      showMessage({
+        type: 'danger',
+        icon: 'auto',
+        message: errorMessage(error),
+      });
+    }
+  }
+
   return (
     <Background>
       <Header />
@@ -44,7 +64,9 @@ export default function Dashboard() {
         <MeetupList
           data={meetups}
           keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => <Meetup data={item} />}
+          renderItem={({ item }) => (
+            <Meetup data={item} onSubscribe={handleSubscribe} />
+          )}
         />
       </Container>
     </Background>
