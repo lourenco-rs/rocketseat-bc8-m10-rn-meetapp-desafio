@@ -5,6 +5,8 @@ import { Platform } from 'react-native';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import Dashboard from './pages/Dashboard';
+import Subscriptions from './pages/Subscriptions';
+import Profile from './pages/Profile';
 
 export default isSigned =>
   createAppContainer(
@@ -17,6 +19,8 @@ export default isSigned =>
         App: createBottomTabNavigator(
           {
             Dashboard,
+            Subscriptions,
+            Profile,
           },
           {
             resetOnBlur: true,
