@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withNavigationFocus } from 'react-navigation';
 
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, addDays, subDays } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { showMessage } from 'react-native-flash-message';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -17,6 +17,9 @@ import api from '~/services/api';
 
 import {
   Container,
+  DateContainer,
+  DateNavButton,
+  DateNavIcon,
   MeetupList,
   EmptyListContainer,
   EmptyListMessage,
@@ -88,7 +91,15 @@ function Dashboard({ isFocused }) {
     <Background>
       <Header />
       <Container>
-        <DateInput date={date} onChange={setDate} />
+        <DateContainer>
+          <DateNavButton onPress={() => setDate(subDays(date, 1))}>
+            <DateNavIcon name="chevron-left" />
+          </DateNavButton>
+          <DateInput date={date} onChange={setDate} />
+          <DateNavButton onPress={() => setDate(addDays(date, 1))}>
+            <DateNavIcon name="chevron-right" />
+          </DateNavButton>
+        </DateContainer>
 
         {initialLoading && page === 1 && <Loading centralized />}
 

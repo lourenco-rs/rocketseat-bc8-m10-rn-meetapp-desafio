@@ -3,7 +3,7 @@ import { DatePickerAndroid, TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
 
-import { Container, DateText } from './styles';
+import { DateText } from './styles';
 
 export default function DateInput({ date, onChange }) {
   const dateFormatted = useMemo(
@@ -25,10 +25,8 @@ export default function DateInput({ date, onChange }) {
   }
 
   return (
-    <Container>
-      <TouchableOpacity onPress={handleOpenPicker}>
-        <DateText>{dateFormatted}</DateText>
-      </TouchableOpacity>
-    </Container>
+    <TouchableOpacity onPress={handleOpenPicker}>
+      <DateText>{dateFormatted}</DateText>
+    </TouchableOpacity>
   );
 }
