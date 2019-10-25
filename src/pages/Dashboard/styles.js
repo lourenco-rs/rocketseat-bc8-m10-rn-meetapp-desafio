@@ -8,3 +8,13 @@ export const Container = styled.View`
 export const MeetupList = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
 })``;
+
+export const EmptyListContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const EmptyListMessage = styled.Text`
+  color: #fff;
+`;
