@@ -11,7 +11,7 @@ import Background from '~/components/Background';
 import Header from '~/components/Header';
 import Loading from '~/components/Loading';
 import DateInput from './DateInput';
-import Meetup from '~/components/Meetup';
+import MeetupCard from '~/components/MeetupCard';
 
 import api from '~/services/api';
 
@@ -53,9 +53,13 @@ function Dashboard({ isFocused }) {
 
       const data = response.data.map(meetup => ({
         ...meetup,
-        dateFormatted: format(parseISO(meetup.date), "dd 'de' MMMM 'de' yyyy", {
-          locale: pt,
-        }),
+        dateFormatted: format(
+          parseISO(meetup.date),
+          "d 'de' MMMM', às' HH:mm",
+          {
+            locale: pt,
+          }
+        ),
       }));
 
       setMeetups(prevMeetups => prevMeetups.concat(data));
@@ -69,16 +73,19 @@ function Dashboard({ isFocused }) {
     setPage(page + 1);
   }
 
-  async function handleSubscribe(meetupId) {
+  async function handleSubscribe({ id, title }) {
     try {
-      await api.post(`subscriptions/${meetupId}`);
+      console.tron.log('handleSubscribe', id);
+
+      await api.post(`subscriptions/${id}`);
 
       showMessage({
         type: 'success',
         icon: 'auto',
-        message: 'Inscrição realizada com sucesso',
+        message: `Sua inscrição no meetup "${title}" foi realizada com sucesso`,
       });
     } catch (error) {
+      console.tron.error('handleSubscribe');
       showMessage({
         type: 'danger',
         icon: 'auto',
@@ -108,7 +115,11 @@ function Dashboard({ isFocused }) {
             data={meetups}
             keyExtractor={item => String(item.id)}
             renderItem={({ item }) => (
-              <Meetup data={item} onSubscribe={handleSubscribe} />
+              <MeetupCard
+                data={item}
+                buttonText="Realizar inscrição"
+                onButtonPress={() => handleSubscribe(item)}
+              />
             )}
             ListFooterComponent={loadingMore && <Loading />}
             onEndReachedThreshold={0.2}

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '~/components/Button';
-import banner from '~/assets/banner.png';
 
 import {
   Container,
@@ -14,10 +13,11 @@ import {
   Banner,
 } from './styles';
 
-export default function Meetup({ data, onSubscribe, onUnsubscribe }) {
+export default function Meetup({ data, buttonText, onButtonPress }) {
+  console.tron.log('data', data);
   return (
     <Container>
-      <Banner source={banner} />
+      <Banner source={{ uri: data.banner.url }} />
       <Content>
         <Title>{data.title}</Title>
 
@@ -31,20 +31,9 @@ export default function Meetup({ data, onSubscribe, onUnsubscribe }) {
         </Field>
         <Field>
           <Icon name="person" />
-          <FieldText>Organizador: {data.User.name}</FieldText>
+          <FieldText>Organizador: {data.organizer.name}</FieldText>
         </Field>
-
-        {onSubscribe && (
-          <Button onPress={() => onSubscribe(data.id)}>
-            Realizar inscrição
-          </Button>
-        )}
-
-        {onUnsubscribe && (
-          <Button onPress={() => onUnsubscribe(data.id)}>
-            Cancelar inscrição
-          </Button>
-        )}
+        <Button onPress={onButtonPress}>{buttonText}</Button>
       </Content>
     </Container>
   );
@@ -56,15 +45,13 @@ Meetup.propTypes = {
     title: PropTypes.string,
     location: PropTypes.string,
     dateFormatted: PropTypes.string,
-    User: PropTypes.shape({
+    organizer: PropTypes.shape({
       name: PropTypes.string,
     }),
+    banner: PropTypes.shape({
+      url: PropTypes.string,
+    }),
   }).isRequired,
-  onSubscribe: PropTypes.func,
-  onUnsubscribe: PropTypes.func,
-};
-
-Meetup.defaultProps = {
-  onSubscribe: undefined,
-  onUnsubscribe: undefined,
+  buttonText: PropTypes.string.isRequired,
+  onButtonPress: PropTypes.func.isRequired,
 };
